@@ -1,0 +1,342 @@
+export const swaggerSpec = {
+  openapi: '3.0.3',
+  info: {
+    title: 'RentCar Ec — API de Alquiler de Autos',
+    version: '1.0.0',
+    description: `
+## Bienvenido a la API de RentCar Ec
+
+Sistema de alquiler de autos con arquitectura modular API-first.
+
+---
+
+### 🚀 Flujo principal del negocio
+
+Registro → Login → Buscar vehículo → Crear reserva  
+→ Pago → Iniciar alquiler → Devolución
+
+---
+
+### ⚠️ Reglas importantes
+
+- No se permiten reservas solapadas
+- El backend calcula el total
+- Reservas canceladas no bloquean disponibilidad
+    `,
+  },
+
+  servers: [
+    {
+      url: 'http://localhost:3000/api/v1',
+      description: 'Desarrollo',
+    },
+  ],
+
+  paths: {
+    // =========================
+    // VEHÍCULOS
+    // =========================
+    '/vehiculos': {
+      get: {
+        tags: ['Vehículos'],
+        summary: 'Listar vehículos',
+        parameters: [
+          { name: 'page', in: 'query', schema: { type: 'integer' } },
+          { name: 'pageSize', in: 'query', schema: { type: 'integer' } },
+          { name: 'search', in: 'query', schema: { type: 'string' } },
+          { name: 'categoria', in: 'query', schema: { type: 'string' } },
+          { name: 'disponible', in: 'query', schema: { type: 'boolean' } },
+        ],
+        responses: {
+          200: {
+            description: 'Listado de vehículos',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ApiResponseListVehiculo',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    '/vehiculos/{id}': {
+      get: {
+        tags: ['Vehículos'],
+        summary: 'Obtener vehículo por ID',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Vehículo encontrado',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ApiResponseVehiculo',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    '/vehiculos/{id}/disponibilidad': {
+      get: {
+        tags: ['Vehículos'],
+        summary: 'Consultar disponibilidad',
+        parameters: [
+          { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+          { name: 'fechaInicio', in: 'query', required: true, schema: { type: 'string', format: 'date' } },
+          { name: 'fechaFin', in: 'query', required: true, schema: { type: 'string', format: 'date' } },
+        ],
+        responses: {
+          200: {
+            description: 'Disponibilidad',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ApiResponseDisponibilidadVehiculo',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    // =========================
+    // BOOKING - RESERVAS
+    // =========================
+    '/reservas': {
+      post: {
+        tags: ['Reservas'],
+        summary: 'Crear reserva',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/ReservaRequestDto',
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: 'Reserva creada',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ApiResponseReserva',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    '/reservas/{id}': {
+      get: {
+        tags: ['Reservas'],
+        summary: 'Obtener reserva',
+        parameters: [
+          { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+        ],
+        responses: {
+          200: {
+            description: 'Reserva encontrada',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ApiResponseReserva',
+                },
+              },
+            },
+          },
+        },
+      },
+
+      patch: {
+        tags: ['Reservas'],
+        summary: 'Actualizar estado',
+        parameters: [
+          { name: 'id', in: 'path', required: true, schema: { type: 'string' } },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  estado: {
+                    type: 'string',
+                    enum: ['PENDIENTE', 'CONFIRMADA', 'CANCELADA', 'FINALIZADA'],
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: { description: 'Estado actualizado' },
+        },
+      },
+    },
+
+    // =========================
+    // ALQUILERES
+    // =========================
+    '/alquileres': {
+      post: {
+        tags: ['Alquileres'],
+        summary: 'Iniciar alquiler',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/AlquilerRequestDto',
+              },
+            },
+          },
+        },
+        responses: {
+          201: { description: 'Alquiler iniciado' },
+        },
+      },
+    },
+
+    // =========================
+    // DEVOLUCIONES
+    // =========================
+    '/devoluciones': {
+      post: {
+        tags: ['Devoluciones'],
+        summary: 'Registrar devolución',
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/DevolucionRequestDto',
+              },
+            },
+          },
+        },
+        responses: {
+          201: { description: 'Devolución registrada' },
+        },
+      },
+    },
+  },
+
+  components: {
+    schemas: {
+      VehiculoDto: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          nombre: { type: 'string' },
+          descripcion: { type: 'string' },
+          precioPorDia: { type: 'number' },
+          categoria: { type: 'string' },
+          disponible: { type: 'boolean' },
+        },
+      },
+
+      DisponibilidadVehiculoDto: {
+        type: 'object',
+        properties: {
+          disponible: { type: 'boolean' },
+          mensaje: { type: 'string' },
+        },
+      },
+
+      ReservaRequestDto: {
+        type: 'object',
+        required: ['vehiculoId', 'clienteId', 'fechaInicio', 'fechaFin'],
+        properties: {
+          vehiculoId: { type: 'string' },
+          clienteId: { type: 'string' },
+          fechaInicio: { type: 'string', format: 'date' },
+          fechaFin: { type: 'string', format: 'date' },
+        },
+      },
+
+      ReservaDto: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          estado: { type: 'string' },
+          total: { type: 'number' },
+        },
+      },
+
+      AlquilerRequestDto: {
+        type: 'object',
+        required: ['reservaId', 'kmSalida'],
+        properties: {
+          reservaId: { type: 'string' },
+          kmSalida: { type: 'integer' },
+        },
+      },
+
+      DevolucionRequestDto: {
+        type: 'object',
+        properties: {
+          alquilerId: { type: 'string' },
+          kmEntrada: { type: 'integer' },
+          cargoExtra: { type: 'number' },
+        },
+      },
+
+      ApiResponseVehiculo: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: { $ref: '#/components/schemas/VehiculoDto' },
+        },
+      },
+
+      ApiResponseListVehiculo: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/VehiculoDto' },
+          },
+        },
+      },
+
+      ApiResponseDisponibilidadVehiculo: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: {
+            $ref: '#/components/schemas/DisponibilidadVehiculoDto',
+          },
+        },
+      },
+
+      ApiResponseReserva: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          data: { $ref: '#/components/schemas/ReservaDto' },
+        },
+      },
+    },
+  },
+};

@@ -1,0 +1,6 @@
+@MS.Identidad.Api_HostAddress = http://localhost:5244
+
+GET {{MS.Identidad.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

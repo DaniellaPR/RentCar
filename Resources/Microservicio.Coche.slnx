@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/ms-vehiculos-alquiler/">
+    <Project Path="MS.Alquiler.Api/MS.Alquiler.Api.csproj" Id="dc4fd4da-8675-4005-aae4-09e2c09d4bad" />
+    <Project Path="MS.Alquiler.Business/MS.Alquiler.Business.csproj" Id="fffea48f-039f-42dc-8d25-29f9f9c7ef2d" />
+    <Project Path="MS.Alquiler.DataAccess/MS.Alquiler.DataAccess.csproj" />
+    <Project Path="MS.Alquiler.DataManagement/MS.Alquiler.DataManagement.csproj" Id="dd97f63a-eaa8-4a2f-9c0e-b28dcec82c59" />
+  </Folder>
+  <Folder Name="/src/ms-vehiculos-catalogo/">
+    <Project Path="MS.Catalogo.Api/MS.Catalogo.Api.csproj" Id="145c1dea-9187-4d50-9986-08c68c7c44df" />
+    <Project Path="MS.Catalogo.Business/MS.Catalogo.Business.csproj" Id="a9316920-5f64-4026-833b-8174ec52581c" />
+    <Project Path="MS.Catalogo.DataAccess/MS.Catalogo.DataAccess.csproj" />
+    <Project Path="MS.Catalogo.DataManagement/MS.Catalogo.DataManagement.csproj" Id="906f804c-5c54-46b2-9319-d3e41e3cf8b0" />
+  </Folder>
+  <Folder Name="/src/ms-vehiculos-identidad/">
+    <Project Path="MS.Identidad.Api/MS.Identidad.Api.csproj" Id="057920d8-35f9-4e2b-99eb-0f0ef97546df" />
+    <Project Path="MS.Identidad.Business/MS.Identidad.Business.csproj" Id="195a8bbf-51ac-436e-8c4d-db8e8cde6f44" />
+    <Project Path="MS.Identidad.DataAccess/MS.Identidad.DataAccess.csproj" />
+    <Project Path="MS.Identidad.DataManagement/MS.Identidad.DataManagement.csproj" Id="0b04e7f3-5b43-498f-b867-dea370780ce0" />
+  </Folder>
+  <Folder Name="/src/ms-vehiculos-monitoreo/">
+    <Project Path="MS.Monitoreo.Api/MS.Monitoreo.Api.csproj" Id="273b5436-ae68-4107-a98b-2874433a1dcf" />
+    <Project Path="MS.Monitoreo.Business/MS.Monitoreo.Business.csproj" Id="92e5feb0-3c2a-4fbf-bcaa-bf730640ce79" />
+    <Project Path="MS.Monitoreo.DataAccess/MS.Monitoreo.DataAccess.csproj" />
+    <Project Path="MS.Monitoreo.DataManagement/MS.Monitoreo.DataManagement.csproj" Id="cf97bb08-cecd-44e3-92a1-6b948d7eaaa7" />
+  </Folder>
+</Solution>

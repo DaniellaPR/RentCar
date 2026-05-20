@@ -1,0 +1,52 @@
+# 🚀 Plan de Implementación: Reorganización Estructural y Corrección de Entorno
+
+## 🎯 Objetivo
+Resolver el error de tiempo de ejecución de Kestrel (`NullReferenceException` debido a configuraciones faltantes) y reestructurar todo el código fuente en carpetas estandarizadas de microservicios (`src/ms-vehiculos-*`) tal como sugeriste, para una organización visual profesional que no rompa el proyecto.
+
+## User Review Required
+> [!IMPORTANT]
+> **Base de Datos y Secretos:** Para corregir el error de `NullReferenceException`, inyectaré valores de prueba por defecto para `JwtSettings` (como `"Secret": "mi-secreto-super-seguro-de-al-menos-32-caracteres"`) y un string genérico para `ConnectionStrings`. ¿Estás de acuerdo con que use valores por defecto para que Kestrel arranque, y luego tú pones los reales de tu base de datos?
+>
+> **Riesgo Estructural:** Al mover los archivos, todos los proyectos `.csproj` y el `.sln` perderán momentáneamente su conexión. Mi plan incluye un script automatizado para reescribir estas referencias. Es un proceso 100% seguro si seguimos el plan.
+
+## 📝 Problemas Detectados
+
+1. **`NullReferenceException` en `AuthenticationExtensions.cs`**:
+   Ocurre porque el archivo `appsettings.json` de tus microservicios (Catálogo, Alquiler, Identidad) está vacío. Cuando el código busca la sección `"JwtSettings"` para arrancar la validación de tokens, devuelve `null` y Kestrel colapsa.
+2. **Organización de Carpetas (Folder Structure)**:
+   Actualmente tienes las 16 capas (Api, Business, etc.) sueltas en la raíz. Quieres agruparlas por microservicio dentro de una carpeta `src/`.
+
+## 🛠 Cambios Propuestos
+
+### Fase 1: Corrección de Entorno de Ejecución (Appsettings)
+Actualizaremos los archivos `appsettings.json` de `MS.Catalogo.Api`, `MS.Alquiler.Api` y `MS.Identidad.Api` para incluir:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=aws-0-us-east-1.pooler.supabase.com;Database=postgres;Username=postgres.tu-usuario;Password=tu-password"
+  },
+  "JwtSettings": {
+    "Secret": "EstaEsUnaClaveSecretaMuyLargaParaJWT12345!",
+    "Issuer": "MS.Identidad",
+    "Audience": "MS.Microservicios"
+  }
+}
+```
+Esto eliminará por completo el error `500 Internal Server Error` al correr las aplicaciones.
+
+### Fase 2: Reorganización Estructural (Folder Move)
+Moveremos físicamente las carpetas existentes agrupándolas dentro de `src/`:
+- `src/ms-vehiculos-catalogo/` (Contendrá: `MS.Catalogo.Api`, `MS.Catalogo.Business`, `DataAccess`, `DataManagement`)
+- `src/ms-vehiculos-alquiler/` (Contendrá: `MS.Alquiler.Api`, `MS.Alquiler.Business`, `DataAccess`, `DataManagement`)
+- `src/ms-vehiculos-identidad/` (Contendrá: `MS.Identidad.Api`, `MS.Identidad.Business`, `DataAccess`, `DataManagement`)
+- `src/ms-vehiculos-monitoreo/` (Contendrá: `MS.Monitoreo.Api`, `MS.Monitoreo.Business`, `DataAccess`, `DataManagement`)
+
+### Fase 3: Reconfiguración de Referencias Internas
+Al mover los proyectos, el código fallará porque las rutas relativas en los `.csproj` se romperán.
+- Ejecutaremos un script de PowerShell que actualizará los `<ProjectReference Include="..\MS.Catalogo... />` en cada archivo `.csproj` para que apunten a las nuevas rutas relativas dentro de la misma carpeta contenedora.
+- Eliminaremos el archivo viejo `.slnx` y `.sln` y generaremos uno nuevo con la estructura ya ordenada.
+
+## 🧪 Plan de Verificación
+1. Mover los archivos y reconstruir el `.sln`.
+2. Compilar toda la solución en la nueva ruta.
+3. Ejecutar nuevamente la API de Catálogo e invocar el endpoint `GET /api/v1/paula-pozo/Vehiculos` para verificar que Swagger responda con código `200 OK` en lugar de `500 Error`.

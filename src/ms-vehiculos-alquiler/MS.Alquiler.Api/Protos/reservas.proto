@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option csharp_namespace = "MS.Alquiler.Api.Grpc";
+package reservas;
+
+service ReservasService {
+    rpc CrearReserva (CrearReservaRequestMsg) returns (ReservaResponseMsg);
+    rpc ActualizarEstado (ActualizarEstadoRequestMsg) returns (SuccessResponseMsg);
+    rpc ConsultarDisponibilidad (ConsultarDisponibilidadRequest) returns (DisponibilidadResponse);
+}
+
+message CrearReservaRequestMsg {
+    string vehiculoId = 1;
+    string clienteId = 2;
+    string fechaInicio = 3;
+    string fechaFin = 4;
+}
+
+message ReservaResponseMsg {
+    bool success = 1;
+    string id = 2;
+    string estado = 3;
+    double total = 4;
+}
+
+message ActualizarEstadoRequestMsg {
+    string id = 1;
+    string estado = 2;
+}
+
+message SuccessResponseMsg {
+    bool success = 1;
+    string message = 2;
+}
+
+message ConsultarDisponibilidadRequest {
+    string id = 1;
+    string fechaInicio = 2;
+    string fechaFin = 3;
+}
+
+message DisponibilidadResponse {
+    bool success = 1;
+    bool disponible = 2;
+    string mensaje = 3;
+}

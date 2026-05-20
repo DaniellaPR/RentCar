@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/ms-vehiculos-alquiler/">
+    <Project Path="src/ms-vehiculos-alquiler/MS.Alquiler.Api/MS.Alquiler.Api.csproj" />
+    <Project Path="src/ms-vehiculos-alquiler/MS.Alquiler.Business/MS.Alquiler.Business.csproj" />
+    <Project Path="src/ms-vehiculos-alquiler/MS.Alquiler.DataAccess/MS.Alquiler.DataAccess.csproj" />
+    <Project Path="src/ms-vehiculos-alquiler/MS.Alquiler.DataManagement/MS.Alquiler.DataManagement.csproj" />
+  </Folder>
+  <Folder Name="/src/ms-vehiculos-catalogo/">
+    <Project Path="src/ms-vehiculos-catalogo/MS.Catalogo.Api/MS.Catalogo.Api.csproj" />
+    <Project Path="src/ms-vehiculos-catalogo/MS.Catalogo.Business/MS.Catalogo.Business.csproj" />
+    <Project Path="src/ms-vehiculos-catalogo/MS.Catalogo.DataAccess/MS.Catalogo.DataAccess.csproj" />
+    <Project Path="src/ms-vehiculos-catalogo/MS.Catalogo.DataManagement/MS.Catalogo.DataManagement.csproj" />
+  </Folder>
+  <Folder Name="/src/ms-vehiculos-identidad/">
+    <Project Path="src/ms-vehiculos-identidad/MS.Identidad.Api/MS.Identidad.Api.csproj" />
+    <Project Path="src/ms-vehiculos-identidad/MS.Identidad.Business/MS.Identidad.Business.csproj" />
+    <Project Path="src/ms-vehiculos-identidad/MS.Identidad.DataAccess/MS.Identidad.DataAccess.csproj" />
+    <Project Path="src/ms-vehiculos-identidad/MS.Identidad.DataManagement/MS.Identidad.DataManagement.csproj" />
+  </Folder>
+  <Folder Name="/src/ms-vehiculos-monitoreo/">
+    <Project Path="src/ms-vehiculos-monitoreo/MS.Monitoreo.Api/MS.Monitoreo.Api.csproj" />
+    <Project Path="src/ms-vehiculos-monitoreo/MS.Monitoreo.Business/MS.Monitoreo.Business.csproj" />
+    <Project Path="src/ms-vehiculos-monitoreo/MS.Monitoreo.DataAccess/MS.Monitoreo.DataAccess.csproj" />
+    <Project Path="src/ms-vehiculos-monitoreo/MS.Monitoreo.DataManagement/MS.Monitoreo.DataManagement.csproj" />
+  </Folder>
+</Solution>

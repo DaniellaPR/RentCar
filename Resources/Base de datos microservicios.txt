@@ -1,0 +1,250 @@
+Base de datos microservicios
+
+1. ms-vehiculos-catalogo (Cuenta A - Inventario y Oferta)
+
+-- Ejecutar en Cuenta A de Supabase (Sin RLS)
+CREATE TABLE CategoriaVehiculo (
+    CAT_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    CAT_nombre VARCHAR(50) NOT NULL,
+    CAT_descripcion TEXT, 
+    CAT_costoBase NUMERIC(10,2) NOT NULL DEFAULT 0,
+    CAT_capacidadPasajeros INT NOT NULL DEFAULT 0,
+    CAT_capacidadMaletas INT NOT NULL DEFAULT 0,
+    CAT_tipoTransmision VARCHAR(20),
+    CAT_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    CAT_usuarioCreacion VARCHAR(50) DEFAULT 'system',
+    CAT_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    CAT_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Sucursal (
+    SUC_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    SUC_nombre VARCHAR(100) NOT NULL,
+    SUC_ciudad VARCHAR(50) NOT NULL, 
+    SUC_direccion TEXT NOT NULL, 
+    SUC_coordenadas VARCHAR(50), 
+    SUC_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    SUC_usuarioCreacion VARCHAR(50) DEFAULT 'system',
+    SUC_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    SUC_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE HorarioAtencion (
+    HOR_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    SUC_id UUID NOT NULL REFERENCES Sucursal(SUC_id) ON DELETE CASCADE, 
+    HOR_diaSemana VARCHAR(15) NOT NULL,
+    HOR_apertura TIME NOT NULL, 
+    HOR_cierre TIME NOT NULL, 
+    HOR_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    HOR_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    HOR_fechaModificacion TIMESTAMP WITH TIME ZONE,
+    HOR_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Vehiculo (
+    VEH_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    CAT_id UUID NOT NULL REFERENCES CategoriaVehiculo(CAT_id) ON DELETE RESTRICT, 
+    SUC_id UUID NOT NULL REFERENCES Sucursal(SUC_id) ON DELETE RESTRICT, 
+    VEH_placa VARCHAR(15) UNIQUE NOT NULL, 
+    VEH_modelo VARCHAR(50) NOT NULL, 
+    VEH_anio INTEGER NOT NULL,
+    VEH_color VARCHAR(30), 
+    VEH_kilometraje NUMERIC(10,2) DEFAULT 0, 
+    VEH_estado VARCHAR(20) DEFAULT 'Disponible', 
+    VEH_imagenUrl VARCHAR(500) DEFAULT 'https://bryxtfwmhpbnlywibuhx.supabase.co/storage/v1/object/public/ImagenesAutos/auto-default.jpg',
+    VEH_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    VEH_usuarioCreacion VARCHAR(50) DEFAULT 'system',
+    VEH_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    VEH_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Mantenimiento (
+    MAN_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    VEH_id UUID NOT NULL REFERENCES Vehiculo(VEH_id) ON DELETE CASCADE, 
+    MAN_fecha DATE NOT NULL, 
+    MAN_descripcion TEXT, 
+    MAN_costo NUMERIC(10,2), 
+    MAN_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    MAN_usuarioCreacion VARCHAR(50) DEFAULT 'system',
+    MAN_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    MAN_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Tarifa (
+    TAR_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    CAT_id UUID NOT NULL REFERENCES CategoriaVehiculo(CAT_id) ON DELETE CASCADE, 
+    TAR_precioDiario NUMERIC(10,2) NOT NULL, 
+    TAR_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    TAR_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    TAR_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    TAR_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Seguro (
+    SEG_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    SEG_nombre VARCHAR(50) NOT NULL,
+    SEG_costoDiario NUMERIC(10,2) NOT NULL, 
+    SEG_cobertura TEXT, 
+    SEG_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    SEG_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    SEG_fechaModificacion TIMESTAMP WITH TIME ZONE,
+    SEG_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE ExtraAdicional (
+    EXT_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    EXT_nombre VARCHAR(50) NOT NULL,
+    EXT_costo NUMERIC(10,2) NOT NULL, 
+    EXT_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    EXT_usuarioCreacion VARCHAR(50) DEFAULT 'system',
+    EXT_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    EXT_usuarioModificacion VARCHAR(50) 
+);
+
+
+
+
+
+
+
+
+
+2. ms-vehiculos-alquiler (Cuenta A - Transacciones)
+
+-- Ejecutar en Cuenta A de Supabase (Sin RLS)
+CREATE TABLE Reserva (
+    RES_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    CLI_id UUID NOT NULL, -- FK Lógica hacia ms-identidad
+    veh_id UUID NOT NULL, -- FK Lógica hacia ms-catalogo
+    RES_sucursalRetiroId UUID NOT NULL, -- FK Lógica hacia ms-catalogo
+    RES_sucursalEntregaId UUID NOT NULL, -- FK Lógica hacia ms-catalogo
+    PAG_id UUID,
+    RES_fechaRetiro TIMESTAMP WITH TIME ZONE NOT NULL, 
+    RES_fechaEntrega TIMESTAMP WITH TIME ZONE NOT NULL,
+    RES_estado VARCHAR(20) DEFAULT 'Pendiente', 
+    RES_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    RES_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    RES_fechaModificacion TIMESTAMP WITH TIME ZONE,
+    RES_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Pago ( 
+    PAG_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    RES_id UUID NOT NULL REFERENCES Reserva(RES_id) ON DELETE CASCADE, 
+    PAG_monto DECIMAL(10,2) NOT NULL,
+    PAG_metodo VARCHAR(50) NOT NULL, 
+    PAG_estado VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE', 
+    PAG_fechaPago TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP 
+);
+
+CREATE TABLE ReservaDetalle (
+    REX_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    RES_id UUID NOT NULL REFERENCES Reserva(RES_id) ON DELETE CASCADE, 
+    SEG_id UUID, -- FK Lógica hacia ms-catalogo
+    EXT_id UUID, -- FK Lógica hacia ms-catalogo
+    REX_cantidad INTEGER DEFAULT 1,
+    REX_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    REX_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    REX_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    REX_usuarioModificacion VARCHAR(50), 
+    CONSTRAINT chk_rex_tipo CHECK (SEG_id IS NOT NULL OR EXT_id IS NOT NULL) 
+);
+
+
+
+
+
+
+
+
+
+3. ms-vehiculos-identidad (Cuenta B - Usuarios y Auth)
+
+-- Ejecutar en Cuenta B de Supabase (Sin RLS)
+CREATE TABLE Rol (
+    ROL_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    ROL_nombre VARCHAR(50) NOT NULL UNIQUE, 
+    ROL_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    ROL_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    ROL_fechaModificacion TIMESTAMP WITH TIME ZONE,
+    ROL_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE UsuarioApp (
+    USU_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    ROL_id UUID NOT NULL REFERENCES Rol(ROL_id) ON DELETE RESTRICT, 
+    USU_email VARCHAR(100) UNIQUE NOT NULL, 
+    USU_passwordHash VARCHAR(255) NOT NULL, 
+    USU_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    USU_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    USU_fechaModificacion TIMESTAMP WITH TIME ZONE,
+    USU_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE Cliente (
+    CLI_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    CLI_nombres VARCHAR(100) NOT NULL, 
+    CLI_apellidos VARCHAR(100) NOT NULL, 
+    CLI_cedula VARCHAR(15) UNIQUE NOT NULL, 
+    CLI_telefono VARCHAR(20), 
+    CLI_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    CLI_usuarioCreacion VARCHAR(50) DEFAULT 'system',
+    CLI_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    CLI_usuarioModificacion VARCHAR(50) 
+);
+
+CREATE TABLE LicenciaConducir (
+    LIC_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    CLI_id UUID NOT NULL REFERENCES Cliente(CLI_id) ON DELETE CASCADE, 
+    LIC_numero VARCHAR(50) UNIQUE NOT NULL,
+    LIC_categoria VARCHAR(10) NOT NULL, 
+    LIC_vigencia DATE NOT NULL,
+    LIC_fechaCreacion TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    LIC_usuarioCreacion VARCHAR(50) DEFAULT 'system', 
+    LIC_fechaModificacion TIMESTAMP WITH TIME ZONE, 
+    LIC_usuarioModificacion VARCHAR(50) 
+);
+
+
+
+
+
+
+
+
+4. ms-vehiculos-monitoreo (Cuenta B - Logs)
+
+-- Ejecutar en Cuenta B de Supabase (Sin RLS)
+CREATE TABLE Auditoria (
+    AUD_id UUID PRIMARY KEY DEFAULT gen_random_uuid(), 
+    AUD_nombreTabla VARCHAR(50) NOT NULL,
+    AUD_operacion VARCHAR(10) NOT NULL, 
+    AUD_usuario VARCHAR(100), 
+    AUD_fecha TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    AUD_detalleJsonb JSONB 
+);
+
+
+
+
+
+
+
+
+Conexión con base de datos en supabase:
+Para ms-vehiculos-catalogo (.env):
+
+Fragmento de código
+DB_CONNECTION_STRING="postgresql://postgres.kznruunaqgmdpgirmlyq:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+Para ms-vehiculos-alquiler (.env):
+
+Fragmento de código
+DB_CONNECTION_STRING="postgresql://postgres.ogkgggmpwfessmexrrxw:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+Para ms-vehiculos-identidad (.env):
+
+Fragmento de código
+DB_CONNECTION_STRING="postgresql://postgres.fvoqwympubhrszblrxqe:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+Para ms-vehiculos-monitoreo (.env):
+
+Fragmento de código
+DB_CONNECTION_STRING="postgresql://postgres.rioxhhmpxxfocsdutgmm:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"

@@ -1,0 +1,6 @@
+@MS.Alquiler.Api_HostAddress = http://localhost:5150
+
+GET {{MS.Alquiler.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

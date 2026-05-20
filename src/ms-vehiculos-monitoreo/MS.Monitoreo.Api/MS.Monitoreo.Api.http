@@ -1,0 +1,6 @@
+@MS.Monitoreo.Api_HostAddress = http://localhost:5037
+
+GET {{MS.Monitoreo.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

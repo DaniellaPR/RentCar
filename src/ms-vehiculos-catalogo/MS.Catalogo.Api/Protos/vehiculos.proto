@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+option csharp_namespace = "MS.Catalogo.Api.Grpc";
+package vehiculos;
+
+service VehiculosService {
+    rpc GetVehiculos (GetVehiculosRequest) returns (GetVehiculosResponse);
+    rpc GetVehiculoById (GetVehiculoByIdRequest) returns (VehiculoMessage);
+}
+
+message GetVehiculosRequest {
+    int32 page = 1;
+    int32 pageSize = 2;
+    string search = 3;
+    string categoria = 4;
+    bool disponible = 5;
+}
+
+message GetVehiculosResponse {
+    bool success = 1;
+    repeated VehiculoMessage data = 2;
+}
+
+message GetVehiculoByIdRequest {
+    string id = 1;
+}
+
+message VehiculoMessage {
+    string id = 1;
+    string nombre = 2;
+    string descripcion = 3;
+    double precioPorDia = 4;
+    string moneda = 5;
+    string categoria = 6;
+    bool disponible = 7;
+    string imagenUrl = 8;
+}
