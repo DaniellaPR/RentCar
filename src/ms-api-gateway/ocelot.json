@@ -59,7 +59,7 @@
       "Config": [
         {
           "Name": "Catálogo API",
-          "Version": "v1",
+          "Version": "1.0",
           "Url": "https://localhost:7255/swagger/v1/swagger.json"
         }
       ]
@@ -69,7 +69,7 @@
       "Config": [
         {
           "Name": "Alquiler API",
-          "Version": "v1",
+          "Version": "1.0",
           "Url": "https://localhost:7128/swagger/v1/swagger.json"
         }
       ]
@@ -79,7 +79,7 @@
       "Config": [
         {
           "Name": "Identidad API",
-          "Version": "v1",
+          "Version": "1.0",
           "Url": "https://localhost:7270/swagger/v1/swagger.json"
         }
       ]
@@ -89,7 +89,7 @@
       "Config": [
         {
           "Name": "Monitoreo API",
-          "Version": "v1",
+          "Version": "1.0",
           "Url": "https://localhost:7269/swagger/v1/swagger.json"
         }
       ]

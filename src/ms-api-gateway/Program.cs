@@ -9,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddOcelot(builder.Configuration);
 builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
@@ -32,10 +35,14 @@ app.UseSwaggerForOcelotUI(opt =>
 });
 
 // Redirect root to swagger
-app.MapGet("/", context =>
+app.Use(async (context, next) =>
 {
-    context.Response.Redirect("/swagger");
-    return System.Threading.Tasks.Task.CompletedTask;
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+    await next();
 });
 
 app.UseOcelot().Wait();
