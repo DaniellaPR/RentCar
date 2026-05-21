@@ -229,22 +229,57 @@ CREATE TABLE Auditoria (
 
 
 
+-- Leer en donde
+
+ALTER TABLE Rol
+ADD COLUMN ROL_descripcion VARCHAR(255);
+
+UPDATE Rol
+SET ROL_descripcion = 'Acceso completo al sistema'
+WHERE ROL_nombre = 'Administrador';
+
+UPDATE Rol
+SET ROL_descripcion = 'Usuario cliente del sistema'
+WHERE ROL_nombre = 'Cliente';
+
+
+
+
+ALTER TABLE Reserva
+  RENAME COLUMN RES_fechaRetiro TO res_fechainicio;
+
+ALTER TABLE Reserva
+  RENAME COLUMN RES_fechaEntrega TO res_fechafin;
+
+ALTER TABLE Reserva
+  DROP COLUMN RES_sucursalRetiroId,
+  DROP COLUMN RES_sucursalEntregaId,
+  DROP COLUMN PAG_id;
+
+ALTER TABLE Reserva
+  ADD COLUMN res_fechareserva TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  ADD COLUMN res_total NUMERIC(10,2) NOT NULL DEFAULT 0;
+
+
+
+
+
 
 
 Conexión con base de datos en supabase:
 Para ms-vehiculos-catalogo (.env):
 
 Fragmento de código
-DB_CONNECTION_STRING="postgresql://postgres.kznruunaqgmdpgirmlyq:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+DB_CONNECTION_STRING="postgresql://postgres.kznruunaqgmdpgirmlyq:ms-vehiculos-catalogo@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
 Para ms-vehiculos-alquiler (.env):
 
 Fragmento de código
-DB_CONNECTION_STRING="postgresql://postgres.ogkgggmpwfessmexrrxw:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+DB_CONNECTION_STRING="postgresql://postgres.ogkgggmpwfessmexrrxw:ms-vehiculos-alquiler@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
 Para ms-vehiculos-identidad (.env):
 
 Fragmento de código
-DB_CONNECTION_STRING="postgresql://postgres.fvoqwympubhrszblrxqe:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+DB_CONNECTION_STRING="postgresql://postgres.fvoqwympubhrszblrxqe:ms-vehiculos-identidad@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
 Para ms-vehiculos-monitoreo (.env):
 
 Fragmento de código
-DB_CONNECTION_STRING="postgresql://postgres.rioxhhmpxxfocsdutgmm:[YOUR-PASSWORD]@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
+DB_CONNECTION_STRING="postgresql://postgres.rioxhhmpxxfocsdutgmm:ms-vehiculos-monitoreo@aws-1-sa-east-1.pooler.supabase.com:5432/postgres"
