@@ -1,0 +1,101 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/v1/paula-pozo/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7255
+        }
+      ],
+      "UpstreamPathTemplate": "/catalogo/api/v1/paula-pozo/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "SwaggerKey": "catalogo"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/paula-pozo/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7128
+        }
+      ],
+      "UpstreamPathTemplate": "/alquiler/api/v1/paula-pozo/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "SwaggerKey": "alquiler"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/paula-pozo/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7270
+        }
+      ],
+      "UpstreamPathTemplate": "/identidad/api/v1/paula-pozo/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "SwaggerKey": "identidad"
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/paula-pozo/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7269
+        }
+      ],
+      "UpstreamPathTemplate": "/monitoreo/api/v1/paula-pozo/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "SwaggerKey": "monitoreo"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "catalogo",
+      "Config": [
+        {
+          "Name": "Catálogo API",
+          "Version": "1.0",
+          "Url": "https://localhost:7255/swagger/1.0/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "alquiler",
+      "Config": [
+        {
+          "Name": "Alquiler API",
+          "Version": "1.0",
+          "Url": "https://localhost:7128/swagger/1.0/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "identidad",
+      "Config": [
+        {
+          "Name": "Identidad API",
+          "Version": "1.0",
+          "Url": "https://localhost:7270/swagger/1.0/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "monitoreo",
+      "Config": [
+        {
+          "Name": "Monitoreo API",
+          "Version": "1.0",
+          "Url": "https://localhost:7269/swagger/1.0/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7000"
+  }
+}

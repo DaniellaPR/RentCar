@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/src/" />
+  <Folder Name="/src/ms-api-gateway/">
+    <Project Path="src/ms-api-gateway/MS.ApiGateway.csproj" />
+  </Folder>
   <Folder Name="/src/ms-vehiculos-alquiler/">
     <Project Path="src/ms-vehiculos-alquiler/MS.Alquiler.Api/MS.Alquiler.Api.csproj" />
     <Project Path="src/ms-vehiculos-alquiler/MS.Alquiler.Business/MS.Alquiler.Business.csproj" />
