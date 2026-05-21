@@ -47,45 +47,31 @@ namespace MS.Alquiler.Api.Extensions
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
             // 2. SwaggerGen base — solo seguridad JWT; título/versión los pone el configurador
+
+
+
+
             services.AddSwaggerGen(c =>
             {
-                // ── JWT Bearer ──────────────────────────────────────────────────
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization. Formato: 'Bearer {token}'",
                     Name = "Authorization",
-                    In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Ingrese: Bearer {token}"
                 });
 
-                c.OperationFilter<SecurityRequirementsOperationFilter>();
 
-                // ── Swashbuckle 10: resolver conflictos de nombres de acción ───
-                // Necesario cuando dos versiones exponen el mismo operationId base.
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
+
 
             return services;
         }
     }
 
-    public class SecurityRequirementsOperationFilter : IOperationFilter
-    {
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
-        {
-            if (operation.Security == null)
-            {
-                operation.Security = new List<OpenApiSecurityRequirement>();
-            }
-
-            operation.Security.Add(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecuritySchemeReference("Bearer"),
-                    new List<string>()
-                }
-            });
-        }
-    }
+   
 }

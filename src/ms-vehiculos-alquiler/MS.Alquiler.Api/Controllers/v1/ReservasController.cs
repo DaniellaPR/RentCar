@@ -131,6 +131,27 @@ namespace MS.Alquiler.Api.Controllers.v1
             var result = await _reservaService.DeleteAsync(id);
             return Ok(new ApiResponse<bool>(result, "Reserva eliminada."));
         }
+
+
+        [HttpGet("debug-token")]
+        [Authorize]
+        public IActionResult DebugToken()
+        {
+            var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
+
+            return Ok(new
+            {
+                Header = authHeader,
+                Usuario = User.Identity?.Name,
+                Claims = User.Claims.Select(c => new
+                {
+                    c.Type,
+                    c.Value
+                })
+            });
+        }
+
+
     }
 
     // DTO inline del PATCH — nombre único para evitar conflicto con otros controllers

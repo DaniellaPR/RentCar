@@ -50,11 +50,12 @@ namespace MS.Monitoreo.Api.Extensions   // ← CAMBIAR el namespace en cada MS
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT en cabecera Authorization. Ejemplo: 'Bearer {token}'",
-                    Name        = "Authorization",
-                    In          = ParameterLocation.Header,
-                    Type        = SecuritySchemeType.ApiKey,
-                    Scheme      = "Bearer"
+                    Description = "Ingrese: Bearer {token}",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
